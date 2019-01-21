@@ -76,5 +76,50 @@ namespace MyGraniteHouse.Areas.Admin.Controllers
             }
             return this.View(productType);
         }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var productType = await this.db.ProductTypes.FindAsync(id);
+
+            if (productType == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(productType);
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var productType = await this.db.ProductTypes.FindAsync(id);
+
+            if (productType == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(productType);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var productType = await this.db.ProductTypes.FindAsync(id);
+            this.db.ProductTypes.Remove(productType);
+            await this.db.SaveChangesAsync();
+            return this.RedirectToAction(nameof(Index));
+
+        }
     }
 }
