@@ -31,15 +31,50 @@ namespace MyGraniteHouse.Areas.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ProductTypes productTypes)
+        public async Task<IActionResult> Create(ProductTypes productType)
         {
             if (ModelState.IsValid)
             {
-                this.db.Add(productTypes);
+                this.db.Add(productType);
                 await this.db.SaveChangesAsync();
                 return this.RedirectToAction(nameof(Index));
             }
-            return this.View(productTypes);
+            return this.View(productType);
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            var productType = await this.db.ProductTypes.FindAsync(id);
+
+            if (productType == null)
+            {
+                return this.NotFound();
+            }
+
+            return this.View(productType);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, ProductTypes productType)
+        {
+            if (id != productType.Id)
+            {
+                return this.NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                this.db.Update(productType);
+                await this.db.SaveChangesAsync();
+                return this.RedirectToAction(nameof(Index));
+            }
+            return this.View(productType);
         }
     }
 }
