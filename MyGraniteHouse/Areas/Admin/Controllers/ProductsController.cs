@@ -86,5 +86,106 @@ namespace MyGraniteHouse.Areas.Admin.Controllers
 
             return this.RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            productsVM.Product = await this.db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTags).SingleOrDefaultAsync(m => m.Id == id);
+
+            if (productsVM.Product == null)
+            {
+                return NotFound();
+            }
+
+            return this.View(productsVM);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                string webRootPath = hostingEnvironment.WebRootPath;
+                var files = HttpContext.Request.Form.Files;
+
+                var productFromDb = this.db.Products.Where(m => m.Id == productsVM.Product.Id).FirstOrDefault();
+
+                if (files.Count > 0 && files[0] != null)
+                {
+                    var uploads = Path.Combine(webRootPath, StaticDetails.ImageFolder);
+                    var extensionNew = Path.GetExtension(files[0].FileName);
+                    var extensionOld = Path.GetExtension(productFromDb.Image);
+
+                    if (System.IO.File.Exists(Path.Combine(uploads, productsVM.Product.Id + extensionOld)))
+                    {
+                        System.IO.File.Delete(Path.Combine(uploads, productsVM.Product.Id + extensionOld));
+                    }
+
+                    using (var fileStream = new FileStream(Path.Combine(uploads, productsVM.Product.Id + extensionNew), FileMode.Create))
+                    {
+                        files[0].CopyTo(fileStream);
+                    }
+                    productsVM.Product.Image = @"\" + StaticDetails.ImageFolder + @"\" + productsVM.Product.Id + extensionNew;
+                }
+
+                if (productsVM.Product.Image != null)
+                {
+                    productFromDb.Image = productsVM.Product.Image;
+                }
+
+                productFromDb.Name = productsVM.Product.Name;
+                productFromDb.Price = productsVM.Product.Price;
+                productFromDb.Available = productsVM.Product.Available;
+                productFromDb.ProductTypeId = productsVM.Product.ProductTypeId;
+                productFromDb.SpecialTagsId = productsVM.Product.SpecialTagsId;
+                productFromDb.ShadeColor = productsVM.Product.ShadeColor;
+
+                await this.db.SaveChangesAsync();
+                return this.RedirectToAction(nameof(Index));
+            }
+
+            return this.View(productsVM);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            productsVM.Product = await this.db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTags).SingleOrDefaultAsync(m => m.Id == id);
+
+            if (productsVM.Product == null)
+            {
+                return NotFound();
+            }
+
+            return this.View(productsVM);
+        }
+
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+
+            productsVM.Product = await this.db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTags).SingleOrDefaultAsync(m => m.Id == id);
+
+            if (productsVM.Product == null)
+            {
+                return NotFound();
+            }
+
+            return this.View(productsVM);
+        }
+
+
     }
 }
