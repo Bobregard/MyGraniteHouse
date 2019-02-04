@@ -17,5 +17,8 @@ namespace MyGraniteHouse.Data
         public DbSet<ProductTypes> ProductTypes { get; set; }
         public DbSet<SpecialTags> SpecialTags { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<ProductsSelectedForAppointment> ProductsSelectedForAppointment { get; set; }
+
     }
 }
