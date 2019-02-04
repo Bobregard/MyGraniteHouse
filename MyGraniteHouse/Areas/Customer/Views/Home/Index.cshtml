@@ -1,1 +1,30 @@
-﻿
+﻿@model List<MyGraniteHouse.Models.Product>
+
+<br /><br />
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">
+                        <label style="font-size:24px; color:steelblue">@product.Name</label>
+                    </h4>
+                </div>
+                <img src="@product.Image" class="card-img-top" style="height:100%;" alt="Card Image"/>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="btn-group">
+                            <label style="font-size:20px; color:#a51313;">
+                                <b>$@product.Price</b>
+                                /sq.ft
+                            </label>
+                        </div>
+                        <a asp-controller="Home" asp-action="Details" asp-route-id="@product.Id" class="btn btn-outline-info">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

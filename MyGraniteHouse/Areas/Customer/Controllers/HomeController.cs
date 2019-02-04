@@ -4,6 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using MyGraniteHouse.Data;
+using MyGraniteHouse.Extensions;
 using MyGraniteHouse.Models;
 
 namespace MyGraniteHouse.Controllers
@@ -11,24 +14,67 @@ namespace MyGraniteHouse.Controllers
     [Area("Customer")]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext db;
+
+        public HomeController(ApplicationDbContext db)
         {
-            return View();
+            this.db = db;
         }
 
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
 
-            return View();
+        public async Task<IActionResult> Index()
+        {
+            var productList = await this.db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTags).ToListAsync();
+
+            return View(productList);
         }
 
-        public IActionResult Contact()
+        
+        public async Task<IActionResult> Details(int? id)
         {
-            ViewData["Message"] = "Your contact page.";
+            if (id == null)
+            {
+                return this.NotFound();
+            }
+            var product = await this.db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTags).FirstOrDefaultAsync(m => m.Id == id);
 
-            return View();
+            return this.View(product);
         }
+
+        [HttpPost, ActionName("Details")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DetailsPost(int id)
+        {
+            List<int> listShoppingCart = HttpContext.Session.Get<List<int>>("ssShoppingCart");
+            if (listShoppingCart == null)
+            {
+                listShoppingCart = new List<int>();
+            }
+            listShoppingCart.Add(id);
+            HttpContext.Session.Set("ssShoppingCart", listShoppingCart);
+
+            return RedirectToAction("Index", "Home", new { area = "Customer" });
+
+        }
+
+
+        public IActionResult Remove(int id)
+        {
+            List<int> listShoppingCart = HttpContext.Session.Get<List<int>>("ssShoppingCart");
+
+            if (listShoppingCart.Count > 0)
+            {
+                if (listShoppingCart.Contains(id))
+                {
+                    listShoppingCart.Remove(id);
+                }
+            }
+
+            HttpContext.Session.Set("ssShoppingCart", listShoppingCart);
+
+            return this.RedirectToAction(nameof(Index));
+        }
+
 
         public IActionResult Privacy()
         {
