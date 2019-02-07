@@ -1,0 +1,65 @@
+﻿@model MyGraniteHouse.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<form action="/" method="post">
+    <br /><br />
+    <h2 class="text-info">Your Shopping Cart</h2>
+    <br />
+    @if (Model.Products.Count > 0)
+    {
+        <div class="container border border-secondary rounded" style="padding:15px;">
+            <div class="row">
+                <div class="col-8" style="border-right:1px solid black;">
+                    <table class="table table-striped" width="100%">
+                        <tr class="table-info">
+                            <th style="text-align:center" width="20%"></th>
+                            <th style="text-align:center">
+                                <label asp-for="@Model.Products.FirstOrDefault().Name"></label>
+                            </th>
+                            <th style="text-align:center">
+                                <label asp-for="@Model.Products.FirstOrDefault().Price"></label>
+                            </th>
+                            <th style="text-align:center">
+                                <label asp-for="@Model.Products.FirstOrDefault().ShadeColor"></label>
+                            </th>
+                            <th style="text-align:center">
+                                <label asp-for="@Model.Products.FirstOrDefault().ProductTypes.Name"></label>
+                            </th>
+                            <th style="text-align:center"></th>
+                        </tr>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr style="padding:50px;">
+                                <td>
+                                    <a asp-area="Customer" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                                        <img src="@item.Image" width="100%" style="margin:auto; display:block; border-radius:5px; border:1px solid black;" />
+                                    </a>
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(p => item.Name)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(p => item.Price)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(p => item.ShadeColor)
+                                </td>
+                                <td style="text-align:center">
+                                    @Html.DisplayFor(p => item.ProductTypes.Name)
+                                </td>
+                                <td style="text-align:center">
+                                    <button type="submit" class="btn btn-danger" asp-action="Remove" asp-route-id="@item.Id">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</form>
