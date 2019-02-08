@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyGraniteHouse.Data;
 using MyGraniteHouse.Models;
+using MyGraniteHouse.Utility;
 
 namespace MyGraniteHouse.Areas.Admin.Controllers
 {
+    [Authorize(Roles = StaticDetails.SuperAdminEndUser)]
     [Area("Admin")]
     public class SpecialTagsController : Controller
     {

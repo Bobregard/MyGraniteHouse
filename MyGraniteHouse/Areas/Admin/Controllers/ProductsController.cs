@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using MyGraniteHouse.ViewModels;
 
 namespace MyGraniteHouse.Areas.Admin.Controllers
 {
+    [Authorize(Roles = StaticDetails.SuperAdminEndUser)]
     [Area("Admin")]
     public class ProductsController : Controller
     {
