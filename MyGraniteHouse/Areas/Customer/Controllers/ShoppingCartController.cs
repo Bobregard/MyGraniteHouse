@@ -53,9 +53,12 @@ namespace MyGraniteHouse.Areas.Customer.Controllers
         {
             List<int> listCartItems = HttpContext.Session.Get<List<int>>("ssShoppingCart");
 
-            ShoppingCartVM.Appointment.AppointmentDate
+            //Edited jquery-ui.js date format to make it dd/mm/yy
+
+            ShoppingCartVM.Appointment.AppointmentDate = ShoppingCartVM.Appointment.AppointmentDate
                 .AddHours(ShoppingCartVM.Appointment.AppointmentTime.Hour)
                 .AddMinutes(ShoppingCartVM.Appointment.AppointmentTime.Minute);
+
 
             Appointment appointment = ShoppingCartVM.Appointment;
 
