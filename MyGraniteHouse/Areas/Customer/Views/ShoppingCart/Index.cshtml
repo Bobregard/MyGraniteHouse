@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<form action="/" method="post">
+<form method="post">
     <br /><br />
     <h2 class="text-info">Your Shopping Cart</h2>
     <br />
@@ -59,7 +59,69 @@
                         }
                     </table>
                 </div>
+                <div class="col-4 pl-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <label>Name:</label>
+                        </div>
+                        <div class="col-12">
+                            <input asp-for="@Model.Appointment.CustomerName" class="form-control mb-2" />
+                        </div>
+                        <div class="col-12">
+                            <label>Phone number:</label>
+                        </div>
+                        <div class="col-12">
+                            <input asp-for="@Model.Appointment.CustomerPhoneNumber" class="form-control mb-2" />
+                        </div>
+                        <div class="col-12">
+                            <label>Email:</label>
+                        </div>
+                        <div class="col-12">
+                            <input asp-for="@Model.Appointment.CustomerEmail" class="form-control mb-2" />
+                        </div>
+                        <div class="col-12">
+                            <label>Appointment date:</label>
+                        </div>
+                        <div class="col-12">
+                            <input asp-for="@Model.Appointment.AppointmentDate" value="" type="text" id="datepicker" class="form-control mb-2" />
+                        </div>
+                        <div class="col-12">
+                            <label>Appointment time:</label>
+                        </div>
+                        <div class="col-12">
+                            <input asp-for="@Model.Appointment.AppointmentTime" value="" type="text" class="timepicker form-control mb-2" />
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" id="btnPlaceOrder" class="btn btn-success mt-2">Schedule Appointment</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     }
+    else
+    {
+        <div>No items added to the shopping cart...</div>
+    }
 </form>
+
+@section Scripts{
+    <script>
+        $('.timepicker').timepicker({
+            timeFormat: 'h:mm p',
+            interval: 30,
+            minTime: '10',
+            maxTime: '5:00pm',
+            startTime: '10:00',
+            dynamic: true,
+            dropdown: true,
+            scrollbar: true
+        });
+
+      $( function() {
+          $("#datepicker").datepicker({
+              minDate: +1, maxDate: "+3M"
+          });
+      } );
+    </script>
+}
