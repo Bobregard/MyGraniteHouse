@@ -95,31 +95,41 @@
 
             @foreach (var item in Model.Appointments)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(m => item.SalesPerson.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.AppointmentDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.CustomerName)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.CustomerPhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.CustomerEmail)
-                </td>
-                <td>
-                    @Html.DisplayFor(m => item.IsConfirmed)
-                </td>
-                <td>
-                    <partial name="_TableButtonPartial" model="item.Id" />
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => item.SalesPerson.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.AppointmentDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.CustomerName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.CustomerPhoneNumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.CustomerEmail)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.IsConfirmed)
+                    </td>
+                    <td>
+                        <partial name="_TableButtonPartial" model="item.Id" />
+                    </td>
+                </tr>
             }
         </table>
     </div>
 </form>
 
+@section Scripts{
+    <script>
+        $(function () {
+            $("#datepicker").datepicker();
+            $("#format").on("change", function () {
+                $("#datepicker").datepicker("option", "dateFormat", $(this).val());
+            });
+        });
+    </script>
+}
